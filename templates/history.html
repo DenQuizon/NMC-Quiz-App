@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz History</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #2c2c2c;
+            color: #f0f0f0;
+            margin: 0;
+            padding: 40px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .history-item {
+            background-color: #333;
+            border: 1px solid #555;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .history-item-info {
+            flex-grow: 1;
+        }
+        .history-item-info h2 {
+            margin: 0 0 5px 0;
+            font-size: 18px;
+        }
+        .history-item-info p {
+            margin: 0;
+            color: #ccc;
+            font-size: 14px;
+        }
+        .review-button {
+            background-color: #007aff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .no-history {
+            text-align: center;
+            color: #888;
+            margin-top: 50px;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 40px;
+            color: #007aff;
+        }
+        .flash-message {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            background-color: #ff3b30; /* Red for error/warning */
+            color: white;
+            text-align: center;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz History</h1>
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="flash-message">
+              {{ messages[0] }}
+            </div>
+          {% endif %}
+        {% endwith %}
+        
+        {% if quizzes %}
+            {% for quiz in quizzes %}
+                <div class="history-item">
+                    <div class="history-item-info">
+                        <h2>{{ quiz.topic }} Quiz</h2>
+                        <p>Completed on: {{ quiz.date_taken.strftime('%B %d, %Y at %I:%M %p') }}</p>
+                        <p>Score: {{ quiz.score }} / {{ quiz.total_questions }}</p>
+                    </div>
+                    <a href="{{ url_for('review_page', quiz_id=quiz.id) }}" class="review-button">Review Incorrect</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-history">You have not completed any quizzes yet.</p>
+        {% endif %}
+
+        <a href="{{ url_for('index') }}" class="back-link">← Back to Main Menu</a>
+    </div>
+</body>
+</html>

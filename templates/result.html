@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result - NMC Quiz</title>
+    <!-- Re-using the same styles for a consistent look -->
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #2c2c2c;
+            color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            border: 1px solid #555;
+            border-radius: 12px;
+            padding: 40px;
+            width: 800px;
+            text-align: left;
+            background-color: #333;
+        }
+        .result-correct {
+            font-size: 28px;
+            font-weight: bold;
+            color: #34c759; /* Green for correct */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .result-incorrect {
+            font-size: 28px;
+            font-weight: bold;
+            color: #ff3b30; /* Red for incorrect */
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .explanation-box {
+            background-color: #444;
+            border: 1px solid #555;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        .explanation-box h3 {
+            margin-top: 0;
+            color: #ccc;
+        }
+        .explanation-box p {
+            line-height: 1.6;
+        }
+        .button {
+            display: block;
+            width: 100%;
+            background-color: #007aff;
+            color: white;
+            padding: 15px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 18px;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        {% if is_correct %}
+            <h1 class="result-correct">Correct!</h1>
+        {% else %}
+            <h1 class="result-incorrect">Incorrect.</h1>
+            <p>The correct answer was: {{ correct_answer.upper() }}</p>
+        {% endif %}
+
+        <div class="explanation-box">
+            <h3>Explanation</h3>
+            <p>{{ explanation }}</p>
+        </div>
+
+        {% if source and source.strip() %}
+        <p style="font-size: 12px; color: #888; text-align: right; margin-top: 15px;">
+            <strong>Source:</strong> {{ source }}
+        </p>
+        {% endif %}
+
+        <!-- NEW: This logic shows the correct button based on whether we are in review mode -->
+        {% if review_mode %}
+            <a href="{{ url_for('quiz_summary') }}" class="button">← Back to Summary</a>
+        {% else %}
+            <a href="{{ url_for('next_question') }}" class="button">Next Question →</a>
+        {% endif %}
+
+    </div>
+</body>
+</html>
